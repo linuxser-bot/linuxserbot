@@ -10,7 +10,7 @@ const settings = {
   storeWriteInterval: 10000,
   description: "This is a bot for managing group commands and automating tasks.",
   version: "3.0.7",
-  updateZipUrl: "https://github.com/linux-ser/linux-ser-bot/archive/refs/heads/main.zip",
+  updateZipUrl: "https://github.com/linuxser-bot/linuxserbot/archive/refs/heads/main.zip",
 };
 
 module.exports = settings;
