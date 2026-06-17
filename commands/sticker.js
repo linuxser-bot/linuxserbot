@@ -134,7 +134,7 @@ async function stickerCommand(sock, chatId, message) {
         const json = {
            "sticker-pack-id": crypto.randomBytes(32).toString('hex'),
 
-           "sticker-pack-name": "き✯ 𝐋ɪɴᴜх 𝐒ᴇʀ ✯き",
+           "sticker-pack-name": "𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓",
 
            "emojis": ["🧃","✨"]
         };
