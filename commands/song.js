@@ -2,6 +2,7 @@ const axios = require('axios');
 const yts = require('yt-search');
 const fs = require('fs');
 const path = require('path');
+const NodeID3 = require('node-id3');
 const { toAudio } = require('../lib/converter');
 
 const AXIOS_DEFAULTS = {
@@ -450,22 +451,44 @@ _✨ Search • Download • Enjoy_`
 
 		// ================= SEND AUDIO =================
 
-		await sock.sendMessage(chatId, {
+		const tempFile = "./temp/${Date.now()}.mp3";
 
-			audio: finalBuffer,
+fs.writeFileSync(tempFile, finalBuffer);
 
-			mimetype: 'audio/mpeg',
+const tags = {
+title: video?.title?.trim() || '♪ 𝐕ɪʙᴇ 𝐁ʏ 𝐋ꜱ',
+artist: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
+album: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
+performerInfo: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
+image: './assets/bot_image.jpg'
+};
 
-			fileName:
-            `${video.title
-	         .replace(/[\\/:*?"<>|]/g, '')
-	         .substring(0, 80)}.mp3`,
+NodeID3.write(tags, tempFile);
 
-             ptt: false
+finalBuffer = fs.readFileSync(tempFile);
 
-		}, {
-			quoted: message
-		});
+// ================= SEND AUDIO =================
+
+await sock.sendMessage(chatId, {
+
+audio: finalBuffer,
+
+mimetype: 'audio/mpeg',
+
+fileName:
+`${(video?.title || 'linuxser')
+    .replace(/[\\/:*?"<>|]/g, '')
+    .substring(0, 80)}.mp3`,
+
+ptt: false
+
+}, {
+quoted: message
+});
+
+if (fs.existsSync(tempFile)) {
+fs.unlinkSync(tempFile);
+}
 
 		// ================= SUCCESS =================
 
