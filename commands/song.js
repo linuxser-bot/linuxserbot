@@ -471,12 +471,17 @@ finalBuffer = fs.readFileSync(tempFile);
 
 // ================= SEND AUDIO =================
 
+const songName =
+    (video?.title || 'linuxser')
+        .replace(/[\\/:*?"<>|]/g, '')
+        .substring(0, 80);
+
 await sock.sendMessage(chatId, {
-document: finalBuffer,
-mimetype: 'audio/mpeg',
-fileName: "${video?.title?.trim() ?.replace(/[\\/:*?"<>|]/g, '') ?.substring(0, 80) || 'linuxser'}.mp3"
+    document: finalBuffer,
+    mimetype: 'audio/mpeg',
+    fileName: `${songName}.mp3`
 }, {
-quoted: message
+    quoted: message
 });
 
 		// ================= SUCCESS =================
