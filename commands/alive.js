@@ -6,7 +6,7 @@ async function aliveCommand(sock, chatId, message) {
         // React
         await sock.sendMessage(chatId, {
             react: {
-                text: "🤍",
+                text: "🎯",
                 key: message.key
             }
         });
