@@ -472,25 +472,12 @@ finalBuffer = fs.readFileSync(tempFile);
 // ================= SEND AUDIO =================
 
 await sock.sendMessage(chatId, {
-
-audio: finalBuffer,
-
+document: finalBuffer,
 mimetype: 'audio/mpeg',
-
-fileName:
-`${video?.title?.trim()
-    ?.replace(/[\\/:*?"<>|]/g, '')
-    ?.substring(0, 80) || 'linuxser'}.mp3`,
-
-ptt: false
-
+fileName: "${video?.title?.trim() ?.replace(/[\\/:*?"<>|]/g, '') ?.substring(0, 80) || 'linuxser'}.mp3"
 }, {
 quoted: message
 });
-
-if (fs.existsSync(tempFile)) {
-fs.unlinkSync(tempFile);
-}
 
 		// ================= SUCCESS =================
 
