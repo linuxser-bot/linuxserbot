@@ -38,6 +38,7 @@ const stickerCommand = require('./commands/sticker');
 const isAdmin = require('./lib/isAdmin');
 const warnCommand = require('./commands/warn');
 const warningsCommand = require('./commands/warnings');
+const unwarnCommand = require('./commands/unwarn');
 const ttsCommand = require('./commands/tts');
 const tovnCommand = require('./commands/tovn');
 const tomp3Command = require('./commands/tomp3');
@@ -417,6 +418,9 @@ async function handleMessages(sock, messageUpdate, printLog) {
             case userMessage.startsWith('.warn'):
                 const mentionedJidListWarn = message.message.extendedTextMessage?.contextInfo?.mentionedJid || [];
                 await warnCommand(sock, chatId, senderId, mentionedJidListWarn, message);
+                break;
+            case userMessage.startsWith('.unwarn'):
+                await unwarnCommand(sock, chatId, senderId, mentionedJids, message);
                 break;
             case userMessage.startsWith('.tts'):
                 const text = userMessage.slice(4).trim();
