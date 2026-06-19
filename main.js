@@ -146,7 +146,6 @@ const qrCommand = require('./commands/qrcode');
 const readQrCommand = require('./commands/readqr');
 const { startQuizPoll, revealQuizAnswer } = require('./commands/quiz');
 const renameCommand = require('./commands/rename');
-const googleCommand = require('./commands/google');
 
 // Global settings
 global.packname = settings.packname;
@@ -850,10 +849,6 @@ break;
             case userMessage.startsWith('.lyrics'):
                 const songTitle = userMessage.split(' ').slice(1).join(' ');
                 await lyricsCommand(sock, chatId, songTitle, message);
-                break;
-            case userMessage.startsWith('.google'):
-                const googleArgs = userMessage.split(' ').slice(1);
-                await googleCommand(sock, chatId, message, googleArgs);
                 break;
             case userMessage.startsWith('.simp'):
                 const quotedMsg = message.message?.extendedTextMessage?.contextInfo?.quotedMessage;
