@@ -141,7 +141,6 @@ const { animeCommand } = require('./commands/anime');
 const stickercropCommand = require('./commands/stickercrop');
 const updateCommand = require('./commands/update');
 const imgCommand = require('./commands/img');
-const removebgCommand = require('./commands/removebg');
 const { reminiCommand } = require('./commands/remini');
 const { igsCommand } = require('./commands/igs');
 const { anticallCommand, readState: readAnticallState } = require('./commands/anticall');
@@ -1418,9 +1417,6 @@ break;
                     const args = rawText.split(' ').slice(1);
                     await imgCommand(sock, chatId, message, args);
                 }
-                break;
-            case userMessage.startsWith('.removebg') || userMessage.startsWith('.rmbg') || userMessage.startsWith('.nobg'):
-                await removebgCommand.exec(sock, message, userMessage.split(' ').slice(1));
                 break;
             case userMessage.startsWith('.remini') || userMessage.startsWith('.enhance') || userMessage.startsWith('.upscale'):
                 await reminiCommand(sock, chatId, message, userMessage.split(' ').slice(1));
