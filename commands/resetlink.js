@@ -1,7 +1,5 @@
 async function resetlinkCommand(sock, chatId, senderId) {
 try {
-
-```
     if (!chatId.endsWith('@g.us')) {
         return await sock.sendMessage(chatId, {
             text: '❌ This command can only be used in groups.'
@@ -36,7 +34,6 @@ try {
 
         await sock.sendMessage(chatId, {
             text:
-```
 
 `✅ Group Link Reset Successfully
 
@@ -48,14 +45,12 @@ https://chat.whatsapp.com/${newCode}
 edit: processing.key
 });
 
-```
     } catch (err) {
 
         console.error('Group Revoke Error:', err);
 
         await sock.sendMessage(chatId, {
             text:
-```
 
 `❌ Failed To Reset Group Link
 
@@ -66,15 +61,12 @@ edit: processing.key
 });
 }
 
-```
 } catch (error) {
 
     console.error('Reset Link Error:', error);
 
     await sock.sendMessage(chatId, {
         text:
-```
-
 `❌ Unexpected Error
 
 ${error.message}`
