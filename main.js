@@ -1261,8 +1261,8 @@ break;
             case userMessage === '.quizanswer':
                 await revealQuizAnswer(sock, chatId);
                 break;
-            case userMessage.startsWith('.pinterest '):
-                await pinterestCommand (sock, chatId, message, userMessage.slice(11).trim());
+            case userMessage === '.pinterest':
+                await pinterestCommand (sock, chatId, message);
                 break;
             case userMessage === '.shayari' || userMessage === '.shayri':
                 await shayariCommand(sock, chatId, message);
