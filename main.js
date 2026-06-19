@@ -147,6 +147,7 @@ const readQrCommand = require('./commands/readqr');
 const { startQuizPoll, revealQuizAnswer } = require('./commands/quiz');
 const renameCommand = require('./commands/rename');
 const wikipediaCommand = require('./commands/wikipedia');
+const gifCommand = require('./commands/gif');
 
 // Global settings
 global.packname = settings.packname;
@@ -779,6 +780,9 @@ break;
                 break;
             case userMessage === '.meme':
                 await memeCommand(sock, chatId, message);
+                break;
+            case userMessage === '.gif':
+                await gifCommand(sock, chatId, message);
                 break;
             case userMessage === '.joke':
                 await jokeCommand(sock, chatId, message);
