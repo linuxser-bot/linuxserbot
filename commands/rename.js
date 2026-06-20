@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const NodeID3 = require('node-id3');
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
+const { execSync } = require('child_process');
 
-async function renameCommand(sock, chatId, message, text = '') {
+async function renameCommand(sock, chatId, message) {
 
 try {
 
@@ -18,7 +19,7 @@ try {
 
     if (!media) {
         return sock.sendMessage(chatId, {
-            text: '❌ Reply to an audio or document file.'
+            text: '❌ Reply to audio or document file.'
         }, { quoted: message });
     }
 
@@ -27,6 +28,9 @@ try {
     }, { quoted: message });
 
     if (!fs.existsSync('./temp')) fs.mkdirSync('./temp');
+
+    // ---------- UNIQUE ID ----------
+    const id = Date.now();
 
     // ---------- DOWNLOAD ----------
     const buffer = await downloadMediaMessage(
@@ -39,17 +43,17 @@ try {
         {}
     );
 
-    if (!buffer) {
-        return sock.sendMessage(chatId, {
-            text: '❌ Failed to download media.'
-        }, { quoted: message });
-    }
+    const rawPath = path.join('./temp', `raw_${id}.ogg`);
+    const mp3Path = path.join('./temp', `linuxser_${id}.mp3`);
 
-    // ---------- SAVE FILE ----------
-    const filePath = path.join('./temp', `${Date.now()}.mp3`);
-    fs.writeFileSync(filePath, buffer);
+    fs.writeFileSync(rawPath, buffer);
 
-    // ---------- COVER IMAGE (STABLE PATH) ----------
+    // ---------- CONVERT TO REAL MP3 ----------
+    execSync(`ffmpeg -y -i "${rawPath}" -ar 44100 -ac 2 "${mp3Path}"`);
+
+    fs.unlinkSync(rawPath);
+
+    // ---------- COVER IMAGE ----------
     const coverPath = path.join(__dirname, '../assets/bot_image.jpeg');
 
     let coverBuffer = null;
@@ -57,37 +61,37 @@ try {
         coverBuffer = fs.readFileSync(coverPath);
     }
 
-    // ---------- IMPORTANT: NODEID3 COMPAT FORMAT ----------
+    // ---------- ID3 TAGS ----------
     const tags = {
-        title: '♪ 𝐕ɪʙᴇ 𝐁ʏ 𝐋ꜱ',
+        title: '𝐋ɪɴᴜx 𝐒ᴇʀ - Renamed Audio',
         artist: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
-        album: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
+        album: 'Linux Ser Collection',
 
         APIC: coverBuffer
             ? {
                 mime: 'image/jpeg',
                 type: 3,
-                description: 'Cover',
-                data: coverBuffer   // ⭐ THIS IS THE MOST COMPATIBLE FIELD
+                description: 'cover',
+                data: coverBuffer   // ✔ correct format
             }
             : undefined
     };
 
-    NodeID3.write(tags, filePath);
+    NodeID3.write(tags, mp3Path);
 
     // ---------- SUCCESS ----------
     await sock.sendMessage(chatId, {
-        text: '✅ Audio tagged successfully',
+        text: '✅ Audio renamed & tagged successfully',
         edit: progress.key
     });
 
     await sock.sendMessage(chatId, {
-        audio: fs.readFileSync(filePath),
+        audio: fs.readFileSync(mp3Path),
         mimetype: 'audio/mpeg',
-        fileName: 'renamed.mp3'
+        fileName: `linuxser-${id}.mp3`
     }, { quoted: message });
 
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(mp3Path);
 
 } catch (err) {
 
