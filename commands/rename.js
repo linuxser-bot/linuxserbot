@@ -48,25 +48,25 @@ try {
 
     fs.writeFileSync(audioPath, buffer);
 
-    // node-id3 expects the correct tag keys and a Buffer/file path for cover.
-    const tags = {
+    // node-id3: provide cover as Buffer (not path) to ensure embedding works reliably.
+    const imagePath = path.resolve('./assets/bot_image.jpg');
+    const imageBuffer = fs.readFileSync(imagePath);
+
+    const tagsToWrite = {
         title: '♪ 𝐕ɪʙᴇ 𝐁ʏ 𝐋ꜱ',
         artist: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
         album: '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓',
-        // (node-id3 doesn't support performerInfo for ID3v2 in the way you might expect)
-        // performerInfo is left out to ensure tags are written reliably.
-        image: './assets/bot_image.jpg'
+        image: imageBuffer
     };
 
-    // Ensure image path is absolute so node-id3 can read it reliably.
-    const tagsToWrite = {
-        ...tags,
-        image: path.resolve(tags.image)
-    };
-
+    // write tags into the mp3
     NodeID3.write(tagsToWrite, audioPath);
 
+    // debug (optional): read back tags after writing
+    const writtenTags = NodeID3.read(audioPath);
+
     await sock.sendMessage(chatId, {
+
         text: '✅ Audio Tagged Successfully',
         edit: progressMsg.key
     });
