@@ -1,21 +1,48 @@
 const fetch = require('node-fetch');
 
 async function lyricsCommand(sock, chatId, songTitle, message) {
+
+    // 🎵 Start Reaction
+    await sock.sendMessage(chatId, {
+        react: {
+            text: '🎵',
+            key: message.key
+        }
+    });
+
     if (!songTitle) {
-        await sock.sendMessage(chatId, {
-            text: `🎵 *Lyrics Finder* ✨
-
-_🔍 Please enter a song name_
-
-_📌 Usage: .lyrics <song name>_
-
-_🌷 Find lyrics instantly ✨_`
+        return await sock.sendMessage(chatId, {
+            text: `╭───❮ *ʟʏʀɪᴄꜱ* ❯
+│
+├ 🎵 ꜰɪɴᴅ ꜱᴏɴɢ ʟʏʀɪᴄꜱ
+│
+├ ⚡ ᴜꜱᴀɢᴇ:
+│   .ʟʏʀɪᴄꜱ <ꜱᴏɴɢ ɴᴀᴍᴇ>
+│
+├ 📖 ᴇxᴀᴍᴘʟᴇ:
+│   .ʟʏʀɪᴄꜱ ʙᴇʟɪᴇᴠᴇʀ
+│
+╰─────────────⦁`
         }, { quoted: message });
-        return;
     }
 
     try {
-        const apiUrl = `https://lrclib.net/api/search?q=${encodeURIComponent(songTitle)}`;
+
+        // 🔍 Searching Reaction
+        await sock.sendMessage(chatId, {
+            react: {
+                text: '🔍',
+                key: message.key
+            }
+        });
+
+        let searchingMsg = await sock.sendMessage(chatId, {
+    text: `_🔍 Searching ${songTitle}_`
+     }, { quoted: message });
+
+        const apiUrl =
+            `https://lrclib.net/api/search?q=${encodeURIComponent(songTitle)}`;
+
         const res = await fetch(apiUrl);
 
         if (!res.ok) {
@@ -25,10 +52,24 @@ _🌷 Find lyrics instantly ✨_`
         const data = await res.json();
 
         if (!Array.isArray(data) || data.length === 0) {
+
             await sock.sendMessage(chatId, {
-                text: `❌ No lyrics found for "${songTitle}".`
-            }, { quoted: message });
-            return;
+                react: {
+                    text: '❌',
+                    key: message.key
+                }
+            });
+
+            return await sock.sendMessage(chatId, {
+                edit: searchingMsg.key,
+                text: `╭───❮ *ʟʏʀɪᴄꜱ* ❯
+│
+├ ❌ ɴᴏ ʟʏʀɪᴄꜱ ꜰᴏᴜɴᴅ
+│
+├ 🎵 ${songTitle}
+│
+╰─────────────⦁`
+            });
         }
 
         const song = data[0];
@@ -39,35 +80,78 @@ _🌷 Find lyrics instantly ✨_`
             null;
 
         if (!lyrics) {
+
             await sock.sendMessage(chatId, {
-                text: `❌ Lyrics unavailable for "${songTitle}".`
-            }, { quoted: message });
-            return;
+                react: {
+                    text: '❌',
+                    key: message.key
+                }
+            });
+
+            return await sock.sendMessage(chatId, {
+                edit: searchingMsg.key,
+                text: `╭───❮ *ʟʏʀɪᴄꜱ* ❯
+│
+├ ❌ ʟʏʀɪᴄꜱ ᴜɴᴀᴠᴀɪʟᴀʙʟᴇ
+│
+├ 🎵 ${songTitle}
+│
+╰─────────────⦁`
+        });
         }
 
         const maxChars = 4000;
-        const output = lyrics.length > maxChars
-            ? lyrics.substring(0, maxChars) + "\n\n..."
-            : lyrics;
 
+        const output =
+            lyrics.length > maxChars
+                ? lyrics.substring(0, maxChars) + '\n\n...'
+                : lyrics;
+
+        // ✅ Success Reaction
         await sock.sendMessage(chatId, {
-            text: `🎵 Song: *${song.trackName || songTitle}*
+            react: {
+                text: '✅',
+                key: message.key
+            }
+        });
 
-👤 Artist: *${song.artistName || "Unknown"}*
+        return await sock.sendMessage(chatId, {
+    edit: searchingMsg.key,
+    text: `╭───❮ *ʟʏʀɪᴄꜱ* ❯
+│
+├ 🎵 ᴛɪᴛʟᴇ
+│   ${song.trackName || songTitle}
+│
+├ 👤 ᴀʀᴛɪꜱᴛ
+│   ${song.artistName || 'Unknown'}
+│
+╰─────────────⦁
 
-${output}
-
-🌷✨`
-        }, { quoted: message });
+${output}`
+});
 
     } catch (error) {
+
         console.error('Lyrics Error:', error);
 
         await sock.sendMessage(chatId, {
-            text: `❌ Failed to fetch lyrics.
+            react: {
+                text: '❌',
+                key: message.key
+            }
+        });
 
-🔄 Please try again later.`
-        }, { quoted: message });
+        await sock.sendMessage(chatId, {
+    edit: searchingMsg.key,
+    text: `╭───❮ *ʟʏʀɪᴄꜱ* ❯
+│
+├ ❌ ꜰᴇᴛᴄʜ ꜰᴀɪʟᴇᴅ
+│
+├ 🔄 ᴘʟᴇᴀꜱᴇ ᴛʀʏ
+├ ⏳ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ
+│
+╰─────────────⦁`
+});
     }
 }
 
