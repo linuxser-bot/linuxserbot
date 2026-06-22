@@ -77,6 +77,7 @@ const time = istTime
     } 
     
     const pushName = message.pushName || 'User';
+    const totalPlugins = countCommands(helpMessage);
 
     const helpMessage = `╭───❮ *𝐋ɪɴᴜx-𝐒ᴇʀ* ❯
 │ *ᴛɪᴍᴇ* :   ${time}
@@ -295,8 +296,6 @@ const time = istTime
 │             𝐋ɪɴᴜx ꜱᴇʀ 🧃🕊️
 ╰─────────────⦁
 `;
-
-    const totalPlugins = countCommands(helpMessage);
 
     try {
 
