@@ -9,6 +9,37 @@ async function helpCommand(sock, chatId, message) {
         react: { text: '📃', key: message.key }
     });
 
+    function countCommands(menuText) {
+    return menuText
+        .split('\n')
+        .filter(line => {
+            line = line.trim();
+
+            // must start with │
+            if (!line.startsWith('│')) return false;
+
+            // remove │
+            const cmd = line.replace(/^│\s*/, '').trim();
+
+            // ignore info lines
+            if (
+                cmd.includes('*') ||
+                cmd.includes(':') ||
+                cmd.startsWith('⚡') ||
+                cmd.includes('ᴛɪᴍᴇ') ||
+                cmd.includes('ᴅᴀᴛᴇ') ||
+                cmd.includes('ᴏᴡɴᴇʀ') ||
+                cmd.includes('ᴜꜱᴇʀ') ||
+                cmd.includes('ᴘʀᴇғɪx') ||
+                cmd.includes('ᴘʟᴜɢɪɴꜱ') ||
+                cmd.includes('ʀᴜɴᴛɪᴍᴇ')
+            ) return false;
+
+            return true;
+        }).length;
+    }
+    const totalPlugins = countCommands(helpMessage);
+
     // --- Fixed Indian Date & Time Logic ---
 const now = new Date();
 
@@ -54,7 +85,7 @@ const time = istTime
 │ *ᴏᴡɴᴇʀ* :  ${settings.ownerName || '𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓'}
 │ *ᴜꜱᴇʀ* :  ${pushName}
 │ *ᴘʀᴇғɪx* : .
-│ *ᴘʟᴜɢɪɴꜱ* : 175
+│ *ᴘʟᴜɢɪɴꜱ* : ${totalPlugins}
 │ *ʀᴜɴᴛɪᴍᴇ* : ${runtime()}
 ╰─────────────⦁
 ╭───❮ *ɢᴇɴᴇʀᴀʟ* ❯
