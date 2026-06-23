@@ -3,7 +3,6 @@ const settings = require("../settings");
 async function aliveCommand(sock, chatId, message) {
     try {
 
-        // react
         await sock.sendMessage(chatId, {
             react: {
                 text: "🎯",
@@ -19,35 +18,39 @@ async function aliveCommand(sock, chatId, message) {
         const seconds = Math.floor(uptime % 60);
 
         const text = `👋 ʜᴇʏ ${username}
+
 ɪ ᴀᴍ 𝐋ɪɴᴜx 𝐒ᴇʀ ʙᴏᴛ ᴀʟɪᴠᴇ ɴᴏᴡ!
 
 ⚡ ᴠᴇʀꜱɪᴏɴ: ${settings.version || "3.0.7"}
 ⏰ ʀᴜɴᴛɪᴍᴇ: ${hours}h ${minutes}m ${seconds}s`;
 
-        // ✅ v7 WORKING INTERACTIVE BUTTON (nativeFlow)
-        const msg = {
+        const listMessage = {
             text,
             footer: "⚡ Linux Ser Bot",
-            nativeFlowMessage: {
-                buttons: [
-                    {
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: "📜 MENU",
-                            id: ".menu"
-                        })
-                    }
-                ]
-            }
+
+            title: "🤖 ALIVE MENU",
+            buttonText: "📜 OPEN MENU",
+
+            sections: [
+                {
+                    title: "MAIN COMMANDS",
+                    rows: [
+                        { title: "📜 Menu", rowId: ".menu", description: "Open full command list" },
+                        { title: "⚡ Ping", rowId: ".ping", description: "Check bot speed" },
+                        { title: "👑 Owner", rowId: ".owner", description: "Bot owner info" },
+                        { title: "📊 Runtime", rowId: ".runtime", description: "Check uptime details" }
+                    ]
+                }
+            ]
         };
 
-        await sock.sendMessage(chatId, msg, { quoted: message });
+        await sock.sendMessage(chatId, listMessage, { quoted: message });
 
     } catch (err) {
-        console.error("Alive Error:", err);
+        console.log("Alive error:", err);
 
         await sock.sendMessage(chatId, {
-            text: "❌ Alive command failed"
+            text: "❌ Alive failed"
         }, { quoted: message });
     }
 }
