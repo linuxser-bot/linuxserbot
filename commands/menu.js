@@ -1,6 +1,6 @@
-const { getMenu } = require('../database/menuSettings');
+const { getMenu } = require('./data/menuSettings');
 
-const menu1Command = require('./menu1');
+const menu1Command = require('./help');
 const menu2Command = require('./menu2');
 
 async function menuCommand(sock, chatId, message) {
