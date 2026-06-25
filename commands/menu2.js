@@ -8,30 +8,22 @@ const { execSync } = require('child_process');
 // =========================
 const commandCategories = {
   general: [
-    "menu", "ping", "alive", "owner", "runtime", "news", "8ball"
+    "menu", "menu2", "ping", "alive", "owner", "runtime", "news", "8ball"
   ],
 
   admin: [
     "ban", "promote", "demote", "admins", "mute", "unmute",
     "delete", "kick", "warn", "unwarn", "warnings",
-    "antilink", "antitag", "antibadword",
-    "clear", "jid",
-    "tag", "tagall", "tagnotadmin", "hidetag",
-    "link", "resetlink",
-    "welcome", "goodbye",
-    "setgpp", "setgname", "setgdesc",
-    "groupinfo", "topmembers"
+    "antilink", "antitag", "antibadword", "clear", "jid",
+    "tag", "tagall", "tagnotadmin", "hidetag", "link", "resetlink",
+    "welcome", "goodbye", "setgpp", "setgname", "setgdesc", "groupinfo", "topmembers"
   ],
 
   owner: [
-    "mode", "clearsession",
-    "antidelete", "anticall",
-    "cleartmp",
+    "mode", "clearsession", "antidelete", "anticall", "cleartmp",
     "sudo", "update", "settings", "setpp",
-    "autoreact", "autostatus", "autostatusreact",
-    "autotyping", "autoread",
-    "pmlocker", "pmlocker_setmsg",
-    "setmention", "mention"
+    "autoreact", "autostatus", "autostatusreact", "autotyping", "autoread",
+    "pmlocker", "pmlocker_setmsg", "setmention", "mention"
   ],
 
   image: [
@@ -45,9 +37,8 @@ const commandCategories = {
   ],
 
   game: [
-    "tictactoe", "hangman", "guess",
-    "trivia", "answer", "quiz", "quizanswer",
-    "truth", "dare"
+    "tictactoe", "hangman", "guess", "trivia", 
+    "answer", "quiz", "quizanswer", "truth", "dare"
   ],
 
   ai: [
@@ -192,10 +183,9 @@ async function menu2Command(sock, chatId, message) {
 │✺│  ✦ 𝐏ʟᴜɢɪɴꜱ   : ${pluginCount}
 │✺│  ✦ 𝐑ᴜɴᴛɪᴍᴇ   : ${runtime()}
 │✺╰───────────────
-╰────────────────────────╯;
+╰───────────────────────╯
 
-${buildMenu()}
-╭───〔 𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓ 〕───╮
+${buildMenu()}╭───〔 𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓ 〕───╮
 │✇╭───────────────
 │✇│ 𝐂ʀᴇᴀᴛᴇᴅ ʙʏ 
 │✇│        𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓
