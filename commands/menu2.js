@@ -194,6 +194,7 @@ ${buildMenu()}╭───〔 𝐋ɪ፝֟፝ɴᴜꪎ 𝐒ᴇ𝚁 ⺓ 〕──�
 
   const imagePath = path.join(__dirname, "../assets/bot_image.jpg");
   const mp3Path = path.join(__dirname, "../assets/menu2.mp3");
+  const oggPath = path.join(__dirname, "../assets/menu.ogg");
 
   // =========================
   // SEND MENU
