@@ -145,7 +145,7 @@ async function menu2Command(sock, chatId, message) {
   // NOTE: Menu text below stays unchanged. Only style/art will be replicated for new menu commands.
 
   await sock.sendMessage(chatId, {
-    react: { text: "📃", key: message.key }
+    react: { text: "📜", key: message.key }
   });
 
   const now = new Date();
