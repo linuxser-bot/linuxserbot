@@ -143,7 +143,7 @@ function buildMenu() {
 // =========================
 // HELP COMMAND
 // =========================
-async function helpCommand(sock, chatId, message) {
+async function menuCommand(sock, chatId, message) {
 
   // NOTE: Menu text below stays unchanged. Only style/art will be replicated for new menu commands.
 
@@ -235,4 +235,4 @@ ${buildMenu()}
   }
 }
 
-module.exports = helpCommand;
+module.exports = menuCommand;
